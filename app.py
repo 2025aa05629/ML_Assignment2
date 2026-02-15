@@ -16,11 +16,17 @@ TEST_CSV_PATH = os.path.join(BASE_DIR, "data", "test.csv")
 st.set_page_config(page_title="Mobile Price Classification", layout="centered")
 st.title("📱 Mobile Price Classification App")
 
+@st.cache_resource
+def load_models_and_data():
+    X_train, X_val, y_train, y_val, X_test_final = load_data()
+    models = train_models(X_train, y_train)
+    return models, X_val, y_val, X_test_final
+
 # Load data
-X_train, X_val, y_train, y_val, X_test_final = load_data()
+models, X_val, y_val, X_test_final = load_models_and_data()
+
 
 # Train models
-models = train_models(X_train, y_train)
 st.subheader("📂 Download Test Dataset")
 
 with open('./data/test.csv', "rb") as file:
